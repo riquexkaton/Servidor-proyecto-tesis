@@ -47,4 +47,37 @@ propModels.remove=(id,callback)=>{
     });
 }
 
+propModels.update=({nombre,ubicacion,fecha,mts2,numHabitaciones,numBaños,isCocina,isSala,descripcion,precio,tipoVivienda,tipoInmobiliaria,isEstacionamiento,fotos,idVivienda},callback)=>{
+
+    let insertquery = `UPDATE inmobiliaria set 
+    nombre='${nombre}',
+    ubicacion='${ubicacion}',
+    fecha='${fecha}',
+    metros_cuadrado='${mts2}',
+    num_habitaciones='${numHabitaciones}',
+    num_baños='${numBaños}',
+    isCocina='${isCocina}',
+    isSala='${isSala}',
+    descripcion='${descripcion}',
+    precio='${precio}',
+    tipo_vivienda='${tipoVivienda}',
+    tipo_inmobiliaria='${tipoInmobiliaria}',
+    isEstacionamiento='${isEstacionamiento}',
+    fotos='${fotos}'
+    where inmobiliaria.id_vivienda=${idVivienda}`;
+
+    let insertQueryFormat = mysql.format(insertquery, [nombre,ubicacion,fecha,mts2,numHabitaciones,numBaños,isCocina,isSala,descripcion,precio,tipoVivienda,tipoInmobiliaria,isEstacionamiento,fotos]);
+
+    mysql.query(insertQueryFormat,(err,result)=>{
+        if(err)
+        {
+            throw err;
+        }
+        else 
+        {
+            callback(result);
+        }
+    });
+}
+
 module.exports= propModels;

@@ -1,4 +1,4 @@
-const {search,addProp, remove} = require("../models/propiedades");
+const {search,addProp, remove,update} = require("../models/propiedades");
 const propControllers={
 
 };
@@ -16,7 +16,9 @@ propControllers.add=(req,res)=>{
 }
 
 propControllers.update=(req,res)=>{
-    res.send("se ha actualizado los valores de la propiedad");
+    update(req.body,()=>{
+        res.send("el elemento se ha actualizado de forma satisfactoria");
+    })
 }
 
 propControllers.remove=(req,res)=>{
