@@ -1,3 +1,5 @@
+const jwt= require("jsonwebtoken");
+
 const userControllers = {};
 const { save, read, login } = require("../models/users");
 
@@ -49,5 +51,22 @@ userControllers.login = async (req, res) => {
 userControllers.perfilUsuario = (req, res) => {
     res.send("este es el perfil de un usuario en especifico");
 }
+
+userControllers.authorization= async(req,res,next)=>{
+    try
+    {
+        const token= req.headers["x-access-token"];
+        const checkToken= await jwt.verify(token,process.env.secretKey);
+        if(checkToken)
+        {
+            next();
+        }
+    }
+    catch(err)
+    {
+        res.send("token invalido")
+    }
+}
+
 
 module.exports = userControllers;

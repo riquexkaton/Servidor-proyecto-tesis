@@ -1,6 +1,6 @@
-const res = require("express/lib/response");
 const mysql = require("../database");
 const bcrypt = require("bcryptjs");
+const jwt = require("jsonwebtoken");
 const userModels = {
 
 };
@@ -54,18 +54,23 @@ userModels.login = ({ email, password }, callback) => {
             callback({ isError: true });
         }
         if (result.length == 1) {
-           let hashPassword = result[0].contraseña;
+            let hashPassword = result[0].contraseña;
             let checkCompare = await bcrypt.compare(password, hashPassword);
             if (!checkCompare) {
                 callback({ message: "tu contraseña o correo es invalido", isError: false });
             }
             else {
-                callback({ message: "ha ingresado de forma exitosa", isError: false });
+                const payload = {
+                    id: result[0].id_user
+                };
+                const token = jwt.sign(payload, process.env.secretKey, {
+                    expiresIn: "1h"
+                });
+                callback({ token: token, message: "ha ingresado de forma exitosa", isError: false });
             }
         }
-        else
-        {
-            callback({message:"el usuario no esta registrado", isError:false});
+        else {
+            callback({ message: "el usuario no esta registrado", isError: false });
         }
     })
 
